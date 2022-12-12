@@ -22,7 +22,6 @@ const creatUrl= async function (req,res){
 
         let createdata= await Url.create(data)
 
-
         res.status(201).send({status:true,msg:"Data created successfully",data:{longUrl:createdata.longUrl, shortUrl:createdata.shortUrl,urlCode:createdata.urlCode}})
 
     }catch(err){
