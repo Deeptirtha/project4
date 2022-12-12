@@ -1,6 +1,8 @@
 const Url =require("../model/model")
 const shortId =require("shortid")
 const validUrl = require('valid-url')
+
+
 const creatUrl= async function (req,res){
     try{
         let data =req.body
@@ -16,12 +18,12 @@ const creatUrl= async function (req,res){
         data.urlCode=url
 
         let olddata=await Url.findOne({longUrl:data.longUrl}).select({"urlCode":1,"longUrl":1,"shortUrl":1,"_id":0})
-        if(olddata){return res.status(200).send({status:true,mdg:"data already exist",data:olddata})}
+        if(olddata){return res.status(200).send({status:true,msg:"Data already exist",data:olddata})}
 
         let createdata= await Url.create(data)
 
 
-        res.status(201).send({status:true,msg:"Data created successfully",data:{urlCode:createdata.urlCode, longUrl:createdata.longUrl, shortUrl:createdata.shortUrl}})
+        res.status(201).send({status:true,msg:"Data created successfully",data:{longUrl:createdata.longUrl, shortUrl:createdata.shortUrl,urlCode:createdata.urlCode}})
 
     }catch(err){
         res.status(500).send({status:false,msg:err.message})
@@ -42,6 +44,4 @@ if(!LongUrl){return res.status(404).send({status:false,msg:"can't find any data 
         res.status(500).send({status:false,msg:err.message})
     }
 }
-
-
 module.exports={creatUrl,geturl}

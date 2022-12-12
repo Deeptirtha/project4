@@ -5,6 +5,6 @@ const {creatUrl,geturl}= require("./controller/controller")
 
 router.post("/url/shorten",creatUrl)
 
-router.get("/GET/:urlCode",geturl)
+router.get("/:urlCode",geturl)
 
 module.exports= router
