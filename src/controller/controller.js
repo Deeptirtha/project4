@@ -1,16 +1,24 @@
 const Url =require("../model/model")
 const shortId =require("shortid")
 const validUrl = require('valid-url')
+const axios=require("axios")
 
 
 const creatUrl= async function (req,res){
     try{
         let data =req.body
+      
         if(Object.keys(data).length==0)return res.status(400).send({status:false,msg:"can't create datat with empty body"})
   
         if(typeof(data.longUrl)!=="string"){return res.status(400).send({status:false,msg:"please provide url in string formate"})}
 
         if(!validUrl.isUri(data.longUrl.trim())){return res.status(400).send({status:false,msg:"please provide valid url"})}
+
+        let validUrlchk=await axios.get(data.longUrl.trim())
+        .then(()=>data.longUrl)
+        .catch(()=>null)
+
+        if(!validUrlchk){return res.status(400).send({status:false,msg: `404 Error! Not Found`})}
         
         let url=shortId.generate().toLowerCase()
         let baseUrl="http://localhost:3000/"
@@ -22,7 +30,7 @@ const creatUrl= async function (req,res){
 
         let createdata= await Url.create(data)
 
-        res.status(201).send({status:true,msg:"Data created successfully",data:{longUrl:createdata.longUrl, shortUrl:createdata.shortUrl,urlCode:createdata.urlCode}})
+        return res.status(201).send({status:true,msg:"Data created successfully",data:{longUrl:createdata.longUrl, shortUrl:createdata.shortUrl,urlCode:createdata.urlCode}})
 
     }catch(err){
         res.status(500).send({status:false,msg:err.message})
