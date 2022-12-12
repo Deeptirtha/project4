@@ -6,11 +6,12 @@ const urlSchema = new mongoose.Schema({
         require: true,
         unique: true,
         lowercase: true,
-        trim: true,
+        trim: true
       },
   longUrl: {
     type: String,
     required: true,
+    trim: true
   },
   shortUrl: {
     type: String,
