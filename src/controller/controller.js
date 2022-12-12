@@ -35,8 +35,8 @@ let url=req.params.urlCode
 let LongUrl=await Url.findOne({urlCode:url}).select({longUrl:1,_id:0})
 if(!LongUrl){return res.status(404).send({status:false,msg:"can't find any data with this urlcode"})}  
 
-return res.status(302).redirect(LongUrl.longUrl)
-// res.status(302).send(LongUrl)
+ //res.status(302).redirect(LongUrl.longUrl)
+ res.status(302).send(`Found. Redirecting to ${LongUrl.longUrl}`)
 
 }catch(err){
         res.status(500).send({status:false,msg:err.message})
