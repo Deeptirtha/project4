@@ -18,7 +18,7 @@ const creatUrl= async function (req,res){
         .then(()=>data.longUrl)
         .catch(()=>null)
 
-        if(!validUrlchk){return res.status(400).send({status:false,msg: `404 Error! Not Found`})}
+        if(!validUrlchk){return res.status(400).send({status:false,msg: `404 Error! Not Found ${data.longUrl.trim()}`})}
         
         let url=shortId.generate().toLowerCase()
         let baseUrl="http://localhost:3000/"
