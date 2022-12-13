@@ -18,7 +18,7 @@ const creatUrl= async function (req,res){
         .then(()=>data.longUrl)
         .catch(()=>null)
 
-        if(!validUrlchk){return res.status(400).send({status:false,msg: `404 Error! Not Found ${data.longUrl.trim()}`})}
+        if(!validUrlchk){return res.status(404).send({status:false,msg: `Error! Not Found ${data.longUrl.trim()}`})}
         
         let url=shortId.generate().toLowerCase()
         let baseUrl="http://localhost:3000/"
@@ -44,8 +44,7 @@ let url=req.params.urlCode
 let LongUrl=await Url.findOne({urlCode:url}).select({longUrl:1,_id:0})
 if(!LongUrl){return res.status(404).send({status:false,msg:"can't find any data with this urlcode"})}  
 
- //res.status(302).redirect(LongUrl.longUrl)
- res.status(302).send(`Found. Redirecting to ${LongUrl.longUrl}`)
+ res.status(302).redirect(LongUrl.longUrl)
 
 }catch(err){
         res.status(500).send({status:false,msg:err.message})
