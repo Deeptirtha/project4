@@ -61,8 +61,7 @@ let url=req.params.urlCode
 
 let getLongUrl = await GET_ASYNC(`${req.params.urlCode}`)
 let cacheurl = JSON.parse(getLongUrl)
-
-if(cacheurl){return res.status(307).redirect(cacheurl.longUrl)}
+if(cacheurl){return res.status(302).redirect(cacheurl.longUrl)}
 
 //===================================================searching data in Db and storing in cache================================================
 
