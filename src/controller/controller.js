@@ -28,7 +28,7 @@ const creatUrl= async function (req,res){
         let olddata=await UrlModel.findOne({longUrl:data.longUrl}).select({"urlCode":1,"longUrl":1,"shortUrl":1,"_id":0})
         if(olddata){
                 await SETEX_ASYNC(`${olddata.longUrl}`, 86400, JSON.stringify(olddata))
-                return res.status(200).send({status:true,msg:"Data already exist",data:olddata})}
+                return res.status(200).send({status:true,msg:"Data already exist in Db",data:olddata})}
 
 
 //====================================================checking link exist in real life or not==================================================
@@ -47,7 +47,7 @@ const creatUrl= async function (req,res){
 //=====================================================unique-urlCode=========================================================================
 
         // let old_id=await UrlModel.findOne({urlCode:url})
-        // if(old_id){return res.status(400).send({status:false,msg:"This urlcode already exist try again "})}
+        // if(old_id){return res.status(200).send({status:false,msg:"This urlcode already exist try again "})}
           
 //=============================================================creating new link data==========================================================
         let createdata= await UrlModel.create(data)
