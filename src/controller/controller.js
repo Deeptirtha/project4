@@ -4,6 +4,9 @@ const validUrl = require('valid-url')
 const axios=require("axios")
 const {SETEX_ASYNC,GET_ASYNC}=require("../cache")
 
+
+//*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*--Create Url--*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#**#*#*#*#*#
+
 const creatUrl= async function (req,res){
     try{
         let data =req.body
@@ -34,14 +37,6 @@ const creatUrl= async function (req,res){
         data.shortUrl=baseUrl+url
         data.urlCode=url
 
-//===================================================searching old data in db,and storing in cache==============================================
-
-        // let olddata=await UrlModel.findOne({longUrl:data.longUrl}).select({"urlCode":1,"longUrl":1,"shortUrl":1,"_id":0})
-        // if(olddata){
-        //     await SETEX_ASYNC(`${olddata.longUrl}`, 86400, JSON.stringify(olddata))
-        //     return res.status(200).send({status:true,msg:"Data already exist",data:olddata})}
-
-
 //=============================================================creating new link data==========================================================
         let createdata= await UrlModel.create(data)
         console.log(createdata.longUrl)
@@ -53,6 +48,8 @@ const creatUrl= async function (req,res){
         res.status(500).send({status:false,msg:err.message})
     }
 }
+//*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*--Get Url--*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#**#*#*#*#*#*#
+
 
 const geturl= async function(req,res){
  try{
@@ -60,7 +57,7 @@ let url=req.params.urlCode
 //===========================================================searching data in cache==========================================================
 
 let getLongUrl = await GET_ASYNC(`${req.params.urlCode}`)
-let cacheurl = JSON.parse(getLongUrl)
+let cacheurl =JSON.parse(getLongUrl)
 if(cacheurl){return res.status(302).redirect(cacheurl.longUrl)}
 
 //===================================================searching data in Db and storing in cache================================================
@@ -68,9 +65,7 @@ if(cacheurl){return res.status(302).redirect(cacheurl.longUrl)}
 let LongUrl=await UrlModel.findOne({urlCode:url}).select({longUrl:1,_id:0})
 if(!LongUrl){return res.status(404).send({status:false,msg:"can't find any data with this urlcode"})}  
 await SETEX_ASYNC(`${req.params.urlCode}`, 86400, JSON.stringify(LongUrl))
-
- res.status(302).redirect(LongUrl.longUrl)
-
+res.status(302).redirect(LongUrl.longUrl)
 }catch(err){
         res.status(500).send({status:false,msg:err.message})
     }
