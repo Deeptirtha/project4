@@ -23,6 +23,14 @@ const creatUrl= async function (req,res){
         let cacheurl = JSON.parse(Db_data)
         if(cacheurl){return res.status(200).send({status:true,msg:"Data comming from cache",data:{longUrl:cacheurl.longUrl, shortUrl:cacheurl.shortUrl,urlCode:cacheurl.urlCode}})}
 
+//===================================================searching longurl in Db and setting it in cache============================================
+
+        let olddata=await UrlModel.findOne({longUrl:data.longUrl}).select({"urlCode":1,"longUrl":1,"shortUrl":1,"_id":0})
+        if(olddata){
+                await SETEX_ASYNC(`${olddata.longUrl}`, 86400, JSON.stringify(olddata))
+                return res.status(200).send({status:true,msg:"Data already exist",data:olddata})}
+
+
 //====================================================checking link exist in real life or not==================================================
 
         let validUrlchk=await axios.get(data.longUrl.trim())
@@ -36,12 +44,13 @@ const creatUrl= async function (req,res){
         let baseUrl="http://localhost:3000/"
         data.shortUrl=baseUrl+url
         data.urlCode=url
+//=====================================================unique-urlCode=========================================================================
 
+        // let old_id=await UrlModel.findOne({urlCode:url})
+        // if(old_id){return res.status(400).send({status:false,msg:"This urlcode already exist try again "})}
+          
 //=============================================================creating new link data==========================================================
         let createdata= await UrlModel.create(data)
-        console.log(createdata.longUrl)
-        await SETEX_ASYNC(`${createdata.longUrl}`, 86400, JSON.stringify(createdata))
-
         return res.status(201).send({status:true,msg:"Data created successfully",data:{longUrl:createdata.longUrl, shortUrl:createdata.shortUrl,urlCode:createdata.urlCode}})
 
     }catch(err){
