@@ -4,11 +4,16 @@
   "description": "Lithium\r Scalable URL Shortner Project Requirement\r Phase I\r Overview\r URL shortening is used to create shorter aliases for long URLs. We call these shortened aliases “short links.” Users are redirected to the original URL when they hit these short links. Short links save a lot of space when displayed, printed, messaged, or tweeted. Additionally, users are less likely to mistype shorter URLs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Deeptirtha/project4.git"
+  },
+  "engines": {
+    "npm" : ">=8.0.0  <9.0.0",
+    "node": ">=16.0.0 <17.0.0"
   },
   "author": "",
   "license": "ISC",
