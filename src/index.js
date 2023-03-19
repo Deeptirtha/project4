@@ -2,6 +2,8 @@ const express = require("express");
 const route = require("./router");
 const mongoose = require("mongoose");
  const app = express();
+ var cors = require('cors')
+ app.use(cors())
  app.use(express.json());
 
  mongoose
@@ -14,6 +16,6 @@ const mongoose = require("mongoose");
 
 app.use("/", route);
 
-app.listen(process.env.PORT || 3000, function () {
-  console.log("listening at " + (process.env.PORT || 3000));
+app.listen(process.env.PORT || 3001, function () {
+  console.log("listening at " + (process.env.PORT || 3001));
 });

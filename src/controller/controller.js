@@ -27,7 +27,7 @@ const creatUrl= async function (req,res){
 
         let olddata=await UrlModel.findOne({longUrl:data.longUrl}).select({"urlCode":1,"longUrl":1,"shortUrl":1,"_id":0})
         if(olddata){
-                await SETEX_ASYNC(`${olddata.longUrl}`, 86400, JSON.stringify(olddata))
+                await SETEX_ASYNC(`${olddata.longUrl}`, JSON.stringify(olddata))
                 return res.status(200).send({status:true,msg:"Data already exist in Db",data:olddata})}
 
 
